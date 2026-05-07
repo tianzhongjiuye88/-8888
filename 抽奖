@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微信扫码抽奖</title>
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#b30000;
+    color:#fff;
+    text-align:center;
+}
+.container{
+    padding:40px 20px;
+}
+.card{
+    background:#fff;
+    color:#333;
+    border-radius:20px;
+    padding:30px;
+    max-width:420px;
+    margin:auto;
+}
+h1{
+    color:#d40000;
+}
+button{
+    background:#d40000;
+    color:#fff;
+    border:none;
+    padding:15px 35px;
+    border-radius:50px;
+    font-size:20px;
+    cursor:pointer;
+}
+.result{
+    margin-top:25px;
+    font-size:24px;
+    font-weight:bold;
+}
+.tip{
+    margin-top:15px;
+    color:#777;
+    font-size:14px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>扫码抽大奖</h1>
+        <p>欢迎参与五粮酒福利抽奖活动</p>
+
+        <button onclick="drawLottery()">立即抽奖</button>
+
+        <div class="result" id="result"></div>
+
+        <div class="tip">
+            每人每天限抽一次
+        </div>
+    </div>
+</div>
+
+<script>
+const prizes = [
+    { name: "一等奖：五粮酒礼盒", rate: 5 },
+    { name: "二等奖：100元优惠券", rate: 15 },
+    { name: "三等奖：20元红包", rate: 30 },
+    { name: "谢谢参与", rate: 50 }
+];
+
+function drawLottery(){
+
+    const today = new Date().toLocaleDateString();
+    const lastDraw = localStorage.getItem("lotteryDate");
+
+    if(lastDraw === today){
+        document.getElementById("result").innerHTML = "今天已经抽过奖了";
+        return;
+    }
+
+    let random = Math.random() * 100;
+    let sum = 0;
+    let prize = "谢谢参与";
+
+    for(let i=0;i<prizes.length;i++){
+        sum += prizes[i].rate;
+        if(random <= sum){
+            prize = prizes[i].name;
+            break;
+        }
+    }
+
+    localStorage.setItem("lotteryDate", today);
+
+    document.getElementById("result").innerHTML = prize;
+}
+</script>
+</body>
+</html>
